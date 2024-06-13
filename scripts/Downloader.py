@@ -100,7 +100,7 @@ class Downloader:
 
         # download assets
         await self.hot_update()
-        shutil.rmtree(self.raw_path, ignore_errors=True)
+        shutil.rmtree(self.hot_update_path, ignore_errors=True)
 
         # update version
         self.remote_version.save(self.root)
