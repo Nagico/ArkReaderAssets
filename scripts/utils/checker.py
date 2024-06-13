@@ -16,7 +16,7 @@ class FileChecker:
     def __init__(self, path: Path) -> None:
         self._data = {}
         self.path = path
-        self.data_path = path.parents[1] / "assets" / self.FILENAME
+        self.data_path = path.parents[2] / self.FILENAME
         self.debug = is_debug()
         self.load()
 

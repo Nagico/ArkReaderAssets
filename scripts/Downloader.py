@@ -50,7 +50,7 @@ class Downloader:
         if root is None:
             root = Path.cwd().parents[0]
         self.root = root
-        self.raw_path = root / "temp" / "raw"
+        self.raw_path = root / "tmp" / "raw"
         self.raw_path.mkdir(exist_ok=True, parents=True)
         self.hot_update_path = self.raw_path / "hot_update"
         self.hot_update_path.mkdir(exist_ok=True)
