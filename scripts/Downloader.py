@@ -76,8 +76,6 @@ class Downloader:
         self.filter_str = data["filter"]
         self.filter = Filter.compile(data["filter"])
 
-        shutil.rmtree(self.raw_path, ignore_errors=True)
-
     async def start(self):
         with self.file_checker:
             async with self.session:
