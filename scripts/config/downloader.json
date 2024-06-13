@@ -1,0 +1,26 @@
+{
+  "filter": [
+    "audio/sound_beta_2/enemy/*",
+    "audio/sound_beta_2/music/*",
+    "audio/sound_beta_2/player/*",
+    "audio/sound_beta_2/ambience.ab",
+    "audio/sound_beta_2/avg_*.ab",
+    "audio/sound_beta_2/dialog.ab",
+    "audio/sound_beta_2/general_*.ab",
+    "avg/*",
+    "avg/characters/*",
+    "gamedata/story/*",
+    "gamedata/excel/story_review_tableb*"
+  ],
+  "hot_update_list": {
+    "exclude": [
+      "lpack_vc*",
+      "lpack_scene",
+      "lpack_crart",
+      "lpack_lart",
+      "lpack_dynilst",
+      "lpack_furn",
+      "lpack_retro"
+    ]
+  }
+}

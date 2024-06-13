@@ -1,0 +1,44 @@
+{
+  "del": [
+    "*SpriteAtlasTexture*.webp"
+  ],
+  "opt": [
+    {
+      "file": "*.wav",
+      "action": "ffmpeg_audio",
+      "options": {
+        "format": "mp3",
+        "bitrate": 320
+      }
+    },
+    {
+      "file": "*.webp",
+      "action": "pillow_webp",
+      "options": {
+        "format": "webp",
+        "quality": 90
+      }
+    },
+    {
+      "file": "gamedata/*.txt",
+      "action": "zstd",
+      "options": {
+        "level": 11,
+        "min": 512
+      }
+    },
+    {
+      "file": "gamedata/*.json",
+      "action": "zstd",
+      "options": {
+        "level": 11,
+        "min": 512
+      }
+    }
+  ],
+  "copy": [
+    {
+      "src": ""
+    }
+  ]
+}
