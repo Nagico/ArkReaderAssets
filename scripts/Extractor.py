@@ -10,6 +10,8 @@ from Crypto.Cipher import AES
 
 from utils.download import DownloadTool
 
+ROOT = Path(__file__).parents[1]
+
 
 class Extractor:
     ASSERT_STUDIO_URL = ("https://gh.con.sh/https://github.com/aelurum/AssetStudio/releases/download/v0.18.0"
@@ -22,7 +24,7 @@ class Extractor:
 
     def __init__(self, root: Path | None = None):
         if root is None:
-            root = Path.cwd().parents[0]
+            root = ROOT
         self.root = root
         self.tools_path = root / "scripts" / "tools"
         self.asset_studio_path = self.tools_path / "asset_studio"
@@ -34,7 +36,7 @@ class Extractor:
         self.download_tool = DownloadTool(roads=8)
 
         self.logger = loguru.logger.bind(name="Extractor")
-        with open("./config/downloader.json") as f:
+        with open(ROOT / "scripts" / "config" / "downloader.json") as f:
             config = json.load(f)
         self.filter = self.handle_filter(config["filter"])
     
@@ -176,11 +178,18 @@ class Extractor:
             target_json = path.parent / f"{fbs}.json"
             if target_json.exists():
                 path.unlink()
+                if not os.listdir(path.parent):
+                    os.rmdir(path.parent)
                 continue
 
             json_path = self.decode_file(path, fbs_folder / f"{fbs}.fbs")
             json_path.rename(target_json)
             path.unlink()
+
+            # move upper
+            shutil.move(target_json, target_json.parent.parent / target_json.name)
+            if not os.listdir(target_json.parent):
+                os.rmdir(target_json.parent)
 
     async def check_dotnet8(self):
         result = await asyncio.create_subprocess_shell(

@@ -21,6 +21,9 @@ from utils.versions import GameVersion
 from utils.zip import ZipExtractor
 
 
+ROOT = Path(__file__).parents[1]
+
+
 class Downloader:
     CLIENT_HEADERS = {
         'X-Unity-Version': '2017.4.39f1',
@@ -48,7 +51,7 @@ class Downloader:
         self.logger = logger.bind(name="Downloader")
 
         if root is None:
-            root = Path.cwd().parents[0]
+            root = ROOT
         self.root = root
         self.raw_path = root / "tmp" / "raw"
         self.raw_path.mkdir(exist_ok=True, parents=True)
@@ -70,7 +73,7 @@ class Downloader:
         self.zip_extractor = ZipExtractor(self.raw_path)
         self.file_checker = FileChecker(self.raw_path / "Android")
 
-        with open("./config/downloader.json", "r") as f:
+        with open(ROOT / "scripts" / "config" / "downloader.json", "r") as f:
             data = json.load(f)
         self.hot_update_exclude_filter = Filter.compile(data["hot_update_list"]["exclude"])
         self.filter_str = data["filter"]

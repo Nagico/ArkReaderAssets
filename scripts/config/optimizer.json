@@ -2,6 +2,18 @@
   "del": [
     "*SpriteAtlasTexture*.webp"
   ],
+  "del_dir": [
+    "avg/common",
+    "story/info/obt/guide",
+    "story/obt/guide",
+    "story/obt/legion",
+    "story/info/obt/roguelike",
+    "stroy/obt/roguelike",
+    "stroy/obt/rogue",
+    "stroy/obt/rune",
+    "stroy/obt/sandboxperm",
+    "stroy/obt/tutorial"
+  ],
   "opt": [
     {
       "file": "*.wav",
@@ -36,9 +48,11 @@
       }
     }
   ],
-  "copy": [
-    {
-      "src": ""
-    }
+  "compress_dir": [
+    "audio/sound_beta_2/music/",
+    "avg/characters/",
+    "avg/effects/background/",
+    "avg/effects/battle/",
+    "avg/effects/image/"
   ]
 }
