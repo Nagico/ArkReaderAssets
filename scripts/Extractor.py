@@ -55,7 +55,7 @@ class Extractor:
     async def _start(self):
         await self.check_dotnet8()
         await self.prepare_tools()
-        # await self.extract()
+        await self.extract()
         await self.covert_json()
 
     async def extract(self):

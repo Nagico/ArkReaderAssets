@@ -172,6 +172,7 @@ class Downloader:
         ])
         # recal md5
         await self.file_checker.cal_all()
+        path.unlink()
 
     @staticmethod
     def find_apk_url(data: bytes) -> str | None:
