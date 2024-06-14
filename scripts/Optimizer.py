@@ -42,6 +42,7 @@ class Optimizer:
 
     async def _start(self):
         self.move_files()
+        self.rename_dirs()
         self.remove_redundant()
         await self.check_ffmpeg()
         await self.optimize()
@@ -55,6 +56,14 @@ class Optimizer:
             shutil.move(src / folder, self.dump_path / folder)
 
         shutil.rmtree(self.dump_path / "assets")
+    
+    def rename_dirs(self):
+        # del [uc] in dir name
+        for dirpath, dirnames, filenames in os.walk(self.dump_path):
+            for dirname in dirnames:
+                if dirname.startswith("[uc]"):
+                    new_name = dirname[4:]
+                    os.rename(os.path.join(dirpath, dirname), os.path.join(dirpath, new_name))
 
     def remove_redundant(self):
         self.logger.info("Removing redundant files")
@@ -113,10 +122,10 @@ class Optimizer:
                         self.opt_tasks.append(
                             self.executor.run(func, full_path, options["format"], options["bitrate"])
                         )
-                    elif rule["action"] == "pillow_webp":
-                        self.opt_tasks.append(
-                            self.executor.run(func, full_path, options["format"], options["quality"])
-                        )
+                    # elif rule["action"] == "pillow_webp":
+                    #     self.opt_tasks.append(
+                    #         self.executor.run(func, full_path, options["format"], options["quality"])
+                    #     )
                     elif rule["action"] == "zstd":
                         if file.stat().st_size < options["min"]:
                             break
@@ -155,6 +164,10 @@ class Optimizer:
     def zstd(path: str, level: int):
         with open(path, "rb") as f:
             data = f.read()
+        
+        # check if file is already compressed
+        if data[:4] == b'\x28\xb5\x2f\xfd':
+            return
 
         cctx = zstd.ZstdCompressor(level=level)
         compressed = cctx.compress(data)

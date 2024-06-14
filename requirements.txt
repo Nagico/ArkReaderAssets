@@ -6,3 +6,4 @@ pillow~=10.3.0
 aiofile~=3.8.8
 aiohttp~=3.9.5
 beautifulsoup4~=4.12.3
+pycryptodome~=3.20.0
