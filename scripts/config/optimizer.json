@@ -49,7 +49,6 @@
     }
   ],
   "compress_dir": [
-    "audio/sound_beta_2/music/",
     "avg/characters/",
     "avg/effects/background/",
     "avg/effects/battle/",
