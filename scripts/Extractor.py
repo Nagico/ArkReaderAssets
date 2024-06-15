@@ -57,7 +57,7 @@ class Extractor:
     async def _start(self):
         await self.check_dotnet8()
         await self.prepare_tools()
-        await self.extract()
+        # await self.extract()
         await self.covert_json()
 
     async def extract(self):
@@ -165,7 +165,12 @@ class Extractor:
 
         self.logger.info(f"Find FBS files: {fbs_names}")
 
-        for path in self.dump_path.glob("**/*.bytes"):
+        path_list = list(self.dump_path.glob("**/*.bytes"))
+        for path in path_list:
+            if not path.exists():
+                continue
+            if "#" in path.name:
+                continue
             filename = path.name[:-6]
             fbs = None
             for f in fbs_names:
@@ -175,21 +180,10 @@ class Extractor:
             if fbs is None:
                 continue
 
-            target_json = path.parent / f"{fbs}.json"
-            if target_json.exists():
-                path.unlink()
-                if not os.listdir(path.parent):
-                    os.rmdir(path.parent)
-                continue
-
+            target_json = path.parent.parent / f"{fbs}.json"
             json_path = self.decode_file(path, fbs_folder / f"{fbs}.fbs")
             json_path.rename(target_json)
-            path.unlink()
-
-            # move upper
-            shutil.move(target_json, target_json.parent.parent / target_json.name)
-            if not os.listdir(target_json.parent):
-                os.rmdir(target_json.parent)
+            shutil.rmtree(path.parent)
 
     async def check_dotnet8(self):
         result = await asyncio.create_subprocess_shell(

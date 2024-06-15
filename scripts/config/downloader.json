@@ -10,8 +10,8 @@
     "avg/*",
     "avg/characters/*",
     "gamedata/story/*",
-    "gamedata/excel/story_review_tableb*",
-    "gamedata/excel/story_tableb*"
+    "gamedata/excel/story_review_table*",
+    "gamedata/excel/story_table*"
   ],
   "hot_update_list": {
     "exclude": [
