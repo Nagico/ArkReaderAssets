@@ -87,7 +87,6 @@ class Downloader:
     async def _start(self):
         await self.init_network()
         await self.get_version()
-        self.remote_version.resource_version = "24-05-28-13-45-33-2fd577"
 
         self.assets_url = f"{self.assets_url}/{self.PLATFORM}/assets/{self.remote_version.resource_version}/"
 
