@@ -3,6 +3,7 @@ import re
 import io
 import json
 import shutil
+import hashlib
 import tarfile
 import subprocess
 from pathlib import Path
@@ -25,7 +26,7 @@ class Optimizer:
         self.root = root
         self.tmp_path = self.root / "tmp"
         self.dump_path = self.tmp_path / "dump"
-        self.opt_path = self.tmp_path / "opt"
+        self.assets_path = self.root / "assets"
 
         self.logger = loguru.logger.bind(name="Optimizer")
 
@@ -50,9 +51,52 @@ class Optimizer:
         self.del_dir()
         self.remove_redundant()
         self.move_upper(self.dump_path)
+        self.rename_lower(self.dump_path / "gamedata")
         await self.check_ffmpeg()
-        # await self.optimize()
-        # self.compress_folders()
+        await self.optimize()
+        self.compress_folders()
+        self.merge()
+    
+    @staticmethod
+    def compare_files(file1: str, file2: str, hash_algorithm=hashlib.md5) -> bool:
+        hash_func = hash_algorithm()
+        with open(file1, "rb") as f:
+            hash_func.update(f.read())
+
+        hash1 = hash_func.hexdigest()
+
+        hash_func = hash_algorithm()
+        with open(file2, "rb") as f:
+            hash_func.update(f.read())
+
+        hash2 = hash_func.hexdigest()
+
+        return hash1 == hash2
+
+    def merge(self):
+        self.logger.info("Merging files")
+        count = 0
+        if not os.path.exists(self.assets_path):
+            os.makedirs(self.assets_path)
+
+        for root, dirs, files in os.walk(self.dump_path):
+            relative_path = os.path.relpath(root, self.dump_path)
+            dst_path = os.path.join(self.assets_path, relative_path)
+
+            if not os.path.exists(dst_path):
+                os.makedirs(dst_path)
+
+            for file in files:
+                src_file = os.path.join(root, file)
+                dst_file = os.path.join(dst_path, file)
+
+                if os.path.exists(dst_file) and self.compare_files(src_file, dst_file):
+                    continue
+                count += 1
+                shutil.copy2(src_file, dst_file)
+                self.logger.trace(f"Copied {src_file} to {dst_file}")
+        
+        self.logger.info(f"Copied {count} files")
 
     def del_dir(self):
         for dir in self.del_dirs:
