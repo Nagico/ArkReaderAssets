@@ -56,6 +56,7 @@ class Optimizer:
         await self.optimize()
         self.compress_folders()
         self.merge()
+        shutil.rmtree(self.dump_path)
     
     @staticmethod
     def compare_files(file1: str, file2: str, hash_algorithm=hashlib.md5) -> bool:
